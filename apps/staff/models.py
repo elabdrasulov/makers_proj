@@ -46,24 +46,24 @@ class Staff(models.Model):
 
     # старт/конец работы трекером, ментором, куратором
     trackering_start_date = models.DateField(
-        verbose_name="Начало работы трекером", blank=True
+        verbose_name="Начало работы трекером", blank=True, null=True
     )
     trackering_end_date = models.DateField(
-        verbose_name="Конец работы трекером", blank=True
+        verbose_name="Конец работы трекером", blank=True, null=True
     )
     
     mentoring_start_date = models.DateField(
-        verbose_name="Начало работы ментором", blank=True
+        verbose_name="Начало работы ментором", blank=True, null=True
     )
     mentoring_end_date = models.DateField(
-        verbose_name="Конец работы ментором", blank=True
+        verbose_name="Конец работы ментором", blank=True, null=True
     )
     
     curatoring_start_date = models.DateField(
-        verbose_name="Начало работы куратором", blank=True
+        verbose_name="Начало работы куратором", blank=True, null=True
     )
     curatoring_end_date = models.DateField(
-        verbose_name="Конец работы куратором", blank=True
+        verbose_name="Конец работы куратором", blank=True, null=True
     )
 
 
