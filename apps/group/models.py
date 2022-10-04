@@ -18,3 +18,9 @@ class Group(models.Model):
         Staff, related_name='trackers'
     )
 
+    class Meta:
+        verbose_name = "Группа"
+        verbose_name_plural = "Группы"
+
+    def __str__(self):
+        return f"{self.name_of_group} {self.group_studying_time} -> {self.mentor}"

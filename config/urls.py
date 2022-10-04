@@ -19,6 +19,8 @@ from django.urls import path, include
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+
 schema_view = get_schema_view(
     openapi.Info(
         title='Makers API',
@@ -34,4 +36,6 @@ urlpatterns = [
     # path('group/', include('apps.group.urls')),
     path('room/', include('apps.room.urls')),
     path('staff/', include('apps.staff.urls')),
+    path('api/token/', TokenObtainPairView.as_view()),
+    path('api/token/refresh/', TokenRefreshView.as_view()),
 ]
