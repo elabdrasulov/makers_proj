@@ -37,6 +37,13 @@ class Staff(models.Model):
         verbose_name="Конец стажировки", blank=True, null=True
     )
     
+    # заметки о сотруднике
+    notes = models.TextField(
+        max_length=1000, 
+        verbose_name="Дополнительно(заметки)",
+        blank=True, null=True
+    )
+
     # старт/конец работы трекером, ментором, куратором
     trackering_start_date = models.DateField(
         verbose_name="Начало работы трекером", blank=True
@@ -59,16 +66,6 @@ class Staff(models.Model):
         verbose_name="Конец работы куратором", blank=True
     )
 
-
-    # @property
-    # def start_date(self):
-    #     if self.staff_position == 'Tracker':
-    #         trackering_start_date = models.DateTimeField(
-    #             verbose_name="Начало работы трекером", blank=True
-    #         )
-    #         trackering_end_date = models.DateTimeField(
-    #             verbose_name="Конец работы трекером", blank=True
-    #         )
 
 
     class Meta:
