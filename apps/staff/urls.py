@@ -6,5 +6,6 @@ urlpatterns = [
     path('staffs/<int:pk>/', StaffDetailAPIView.as_view()),
     path('staffs/', StaffListAPIView.as_view()),
     path('staffs/update/<int:pk>/', StaffUpdateAPIView.as_view()),
-    path('staffs/delete/<int:pk>', StaffDeleteAPIView.as_view()), 
+    path('staffs/delete/<int:pk>/', StaffDeleteAPIView.as_view()), 
+    path('staffs/ready_to_be_mentor/', ready_to_be_mentor),
 ]
