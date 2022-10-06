@@ -58,4 +58,3 @@ def add_to_trade(request):
     serializer = RoomChangeSer(data = request.POST)
     if serializer.is_valid(raise_exception=True, ):
         return Response("successfully traded", 200)
-    permission_classes = [IsAdminUser,]

@@ -1,7 +1,7 @@
 import datetime
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters
+from rest_framework import filters, status
 from rest_framework.decorators import api_view
 from rest_framework.generics import *
 from rest_framework.permissions import IsAdminUser
@@ -51,14 +51,15 @@ class GroupCreateAPIView(CreateAPIView):
         )
         group.tracker.add(tracker_id)
 
-        if room is not None and time=='day':
+        if time=='day':
             room.room_status_day = True
-        elif room is not None and time=='evening':
+            room.save()
+        elif time=='evening':
             room.room_status_evening = True
+            room.save()
 
         serializer = GroupSerializer(group)
         return Response(serializer.data)
-        # return Response('ok')
         
         
 
@@ -74,9 +75,9 @@ class GroupListAPIView(ListAPIView):
         DjangoFilterBackend,
     ]
 
-    filterset_fields = []
-    search_fields = []
-    ordering_fields = []
+    filterset_fields = ['name_of_group', 'group_studying_time']
+    search_fields = ['name_of_group', 'group_studying_time']
+    ordering_fields = ['number_of_students']
 
 class GroupDetailAPIView(RetrieveAPIView):
     queryset = Group.objects.all()
@@ -92,19 +93,46 @@ class GroupUpdateAPIView(UpdateAPIView):
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
 
-        if instance.room.groups_room.exists() and instance.room.room_status_day == True and request.data['group_studying_time']=='day':
-            return Response('Дневная группа занята', 400)
-        elif instance.room.groups_room.exists() and instance.room.room_status_day == True and request.data['group_studying_time']=='evening':
-            return Response('Вечерняя группа занята', 400)
+        try:
+            time = request.data['group_studying_time']
+            if time == 'day' or time == 'evening':
+                return Response('Нельзя изменить время обучения!', 400)
+        except:
+            pass
+
+        try: 
+            room_id = request.data['room']
+            room = get_object_or_404(Room, id=room_id)
+
+            if instance.number_of_students > room.capacity:
+                return Response(
+                    f'Студентов больше, чем вместимость({room.capacity}) кабинета!', 400
+                )
+            
+            if instance.group_studying_time=='day':
+                room.room_status_day = True
+                room.save()
+                if instance.room:
+                    instance.room.room_status_day = False
+                    instance.room.save()
+            elif instance.group_studying_time=='evening':
+                room.room_status_evening = True
+                room.save()
+                if instance.room:
+                    instance.room.room_status_evening = False
+                    instance.room.save()
+            
+        except:
+            pass
+        
+        # if instance.room.groups_room.exists() and instance.room.room_status_day == True and request.data['group_studying_time']=='day':
+        #     return Response('Дневная группа занята', 400)
+        # elif instance.room.groups_room.exists() and instance.room.room_status_evening == True and request.data['group_studying_time']=='evening':
+        #     return Response('Вечерняя группа занята', 400)
 
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
-
-        if request.data['group_studying_time']=='day':
-            instance.room_status_day = True
-        elif request.data['group_studying_time']=='evening':
-            instance.room_status_evening = True
 
         # if getattr(instance, '_prefetched_objects_cache', None):
         #     instance._prefetched_objects_cache = {}
@@ -113,6 +141,39 @@ class GroupUpdateAPIView(UpdateAPIView):
 
     def patch(self, request, *args, **kwargs):
         kwargs['partial'] = True
+        instance = self.get_object()
+
+        try:
+            time = request.data['group_studying_time']
+            if time == 'day' or time == 'evening':
+                return Response('Нельзя изменить время обучения!', 400)
+        except:
+            pass
+
+        try: 
+            room_id = request.data['room']
+            room = get_object_or_404(Room, id=room_id)
+
+            if instance.number_of_students > room.capacity:
+                return Response(
+                    f'Студентов больше, чем вместимость({room.capacity}) кабинета!', 400
+                )
+
+            if instance.group_studying_time=='day':
+                room.room_status_day = True
+                room.save()
+                if instance.room:
+                    instance.room.room_status_day = False
+                    instance.room.save()
+            elif instance.group_studying_time=='evening':
+                room.room_status_evening = True
+                room.save()
+                if instance.room:
+                    instance.room.room_status_evening = False
+                    instance.room.save()
+        except:
+            pass
+
         return super().put(request, *args, **kwargs)
 
 
@@ -121,3 +182,20 @@ class GroupDeleteAPIView(DestroyAPIView):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
     permission_classes = [IsAdminUser,]
+
+
+    def delete(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return Response(
+            'Группа была успешно удалена!', status=status.HTTP_204_NO_CONTENT
+        )
+
+    def perform_destroy(self, instance):
+        instance.delete()
+        if instance.group_studying_time == 'day':
+            instance.room.room_status_day = False
+            instance.room.save()
+        elif instance.group_studying_time == 'evening':
+            instance.room.room_status_evening == False
+            instance.room.save()

@@ -10,6 +10,7 @@ class GroupSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         rep = super().to_representation(instance)
         rep['mentor'] = f"{instance.mentor.name} {instance.mentor.last_name}"
-        rep['room'] = instance.room.room_number
+        if instance.room:
+            rep['room'] = instance.room.room_number
         rep['tracker'] = StaffSerializer(instance.tracker.all(), many=True).data
         return rep
