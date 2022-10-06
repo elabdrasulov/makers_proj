@@ -1,4 +1,5 @@
 from django.db import models
+# from apps.group.models import Group
 
 
 class Staff(models.Model):
@@ -27,7 +28,9 @@ class Staff(models.Model):
         null=True,
         verbose_name='Направление'
     )
-    staff_position = models.CharField(choices=POSITIONS, max_length=20, verbose_name='Должность')
+    staff_position = models.CharField(
+        choices=POSITIONS, max_length=20, verbose_name='Должность'
+    )
 
     # начало/конец стажировки
     start_of_training = models.DateField(
@@ -43,6 +46,9 @@ class Staff(models.Model):
         verbose_name="Дополнительно(заметки)",
         blank=True, null=True
     )
+
+    # когда планирует уйти
+    plans_to_leave = models.DateField(blank=True, null=True)
 
     # старт/конец работы трекером, ментором, куратором
     trackering_start_date = models.DateField(
@@ -65,8 +71,6 @@ class Staff(models.Model):
     curatoring_end_date = models.DateField(
         verbose_name="Конец работы куратором", blank=True, null=True
     )
-
-
 
     class Meta:
         verbose_name = "Сотрудник"

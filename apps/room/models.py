@@ -1,7 +1,8 @@
 from django.db import models
+# from apps.group.models import Group
 
-from apps.staff.models import Staff
-from apps.group.models import Group
+# from apps.staff.models import Staff
+# from apps.group.models import Group
 
 class Room(models.Model):
     room_number = models.IntegerField()
@@ -13,12 +14,6 @@ class Room(models.Model):
     room_status_day = models.BooleanField(default=False)
     room_status_evening = models.BooleanField(default=False)
 
-    mentor = models.ForeignKey(
-        Staff, related_name='rooms', 
-        on_delete=models.SET_DEFAULT,
-        default='кабинет свободен'
-    )
-    group = models.ForeignKey(Group, related_name='rooms', on_delete=models.SET_DEFAULT, default='кабинет свободен')
 
     class Meta:
         verbose_name = "Кабинеты"
