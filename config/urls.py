@@ -33,7 +33,7 @@ schema_view = get_schema_view(
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('docs/', schema_view.with_ui("swagger")),
-    # path('group/', include('apps.group.urls')),
+    path('group/', include('apps.group.urls')),
     path('room/', include('apps.room.urls')),
     path('staff/', include('apps.staff.urls')),
     path('api/token/', TokenObtainPairView.as_view()),

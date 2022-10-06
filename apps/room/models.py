@@ -10,13 +10,19 @@ class Room(models.Model):
     capacity = models.IntegerField()
     
     # Свободен ли кабинет
-    room_status = models.BooleanField(default=False)
-
+    room_status_day = models.BooleanField(default=False)
+    room_status_evening = models.BooleanField(default=False)
 
     mentor = models.ForeignKey(
         Staff, related_name='rooms', 
         on_delete=models.SET_DEFAULT,
         default='кабинет свободен'
     )
-    group = models.ForeignKey(Group, related_name='rooms', on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, related_name='rooms', on_delete=models.SET_DEFAULT, default='кабинет свободен')
+
+    class Meta:
+        verbose_name = "Кабинеты"
+        verbose_name_plural = "Кабинеты"
     
+    def __str__(self) -> str:
+        return f'{self.room_number} {self.capacity} -> {self.mentor}'
