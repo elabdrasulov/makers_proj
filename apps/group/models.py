@@ -24,7 +24,10 @@ class Group(models.Model):
     name_of_group = models.CharField(max_length=50)
     date_of_start = models.DateField(choices =  DATE_PROMIS,blank=True, null=True)
     date_of_end = models.DateField(blank=True, null=True)
-    group_studying_time = models.CharField(choices=STUDYING_TIME, max_length=20)
+    group_studying_time = models.CharField(
+        choices=STUDYING_TIME, max_length=20,
+        blank=True, null=True
+    )
     number_of_students = models.IntegerField(
         default=1,
         validators=[
@@ -40,7 +43,7 @@ class Group(models.Model):
     # трекеры группы
     tracker = models.ManyToManyField(
         Staff, related_name='trackers',
-        blank=True, null=True
+        # blank=True, null=True
     )
 
     room = models.ForeignKey(

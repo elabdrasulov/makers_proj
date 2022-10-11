@@ -20,4 +20,4 @@ class Room(models.Model):
         verbose_name_plural = "Кабинеты"
     
     def __str__(self) -> str:
-        return f'{self.room_number} {self.capacity}'
+        return f'Кабинет №{self.room_number} - {self.capacity}ч.'

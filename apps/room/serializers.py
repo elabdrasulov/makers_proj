@@ -57,6 +57,3 @@ class RoomChangeSer(serializers.Serializer):
 
         return {}
 
-class Analyz(serializers.Serializer):
-    date = serializers.DateField()
-    print(date)

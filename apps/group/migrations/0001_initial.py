@@ -22,7 +22,7 @@ class Migration(migrations.Migration):
                 ('name_of_group', models.CharField(max_length=50)),
                 ('date_of_start', models.DateField(blank=True, null=True)),
                 ('date_of_end', models.DateField(blank=True, null=True)),
-                ('group_studying_time', models.CharField(choices=[('day', 'day'), ('evening', 'evening')], max_length=20)),
+                ('group_studying_time', models.CharField(blank=True, choices=[('day', 'day'), ('evening', 'evening')], max_length=20, null=True)),
                 ('number_of_students', models.IntegerField(default=1, validators=[django.core.validators.MinValueValidator(1), django.core.validators.MaxValueValidator(36)])),
                 ('mentor', models.ForeignKey(default='Ментор пока не определен', on_delete=django.db.models.deletion.SET_DEFAULT, related_name='groups_mentor', to='staff.staff')),
                 ('room', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='groups_room', to='room.room')),

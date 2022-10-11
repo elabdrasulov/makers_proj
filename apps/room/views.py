@@ -67,27 +67,3 @@ def get_free_room(request):
             free_rooms.append(f_r.data)
     return Response(free_rooms)
 
-# @api_view(['POST'])
-# def get_analyz_of_room(request):
-#     analyz_of_group = Group.objects.all()
-#     # if request.data['group_studying_time']=='day':
-#     #     analyz_of_group.room_status_day = False
-#     #     analyz_of_group.save()
-#     # elif request.data['group_studying_time']=='evening':
-#     #     analyz_of_group.room_status_evening = False
-#     #     analyz_of_group.save()
-#     #     # self.perform_destroy(instance=instance)
-#     analyz_of_groups = []
-#     for f_r in analyz_of_group:
-#         # if request == f_r.date_of_end:
-#             f_r = GroupSerializer(f_r)
-#             return Response(f_r.data)
-#     # analyz_of_group = GroupSerializer(analyz_of_group)
-#     return Response("not ok")
-
-# @api_view(["POST"])
-# def test(request):
-#     serializer = Analyz(data=request.POST)
-#     if serializer.is_valid(raise_exception=True):
-#         print(serializer)
-#         return Response('success', 200)

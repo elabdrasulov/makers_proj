@@ -27,9 +27,9 @@ class StaffListAPIView(ListAPIView):
         DjangoFilterBackend,
     ]
 
-    filterset_fields = []
-    search_fields = []
-    ordering_fields = []
+    filterset_fields = ['staff_position', 'direction', 'name', 'last_name']
+    search_fields = ['staff_position', 'direction', 'name', 'last_name']
+    ordering_fields = ['staff_position', 'direction', 'name', 'last_name']
 
 class StaffDetailAPIView(RetrieveAPIView):
     queryset = Staff.objects.all()
