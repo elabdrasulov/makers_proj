@@ -13,3 +13,4 @@ drf-api-logger
 celery
 redis
 Pillow
+django-filter

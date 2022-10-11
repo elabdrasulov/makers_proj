@@ -20,6 +20,9 @@ class GroupCreateAPIView(CreateAPIView):
 
     def post(self, request):
         room_id = request.data.get('room')
+        Group.DATE_PROMIS = (
+            ('2022-10-10','2022-10-10'),
+            )
         
         name = request.data.get('name_of_group')
         start_date = request.data.get('date_of_start')
@@ -31,14 +34,22 @@ class GroupCreateAPIView(CreateAPIView):
         
         if int(students)>36:
             return Response("В группе не может быть больше 36 студентов!", 400)
-
+        
+        # print("room", room_id, Room.objects.all())
         room = get_object_or_404(Room, id=room_id)
+        # print("mentor", mentor_id, Staff.objects.all())
         mentor = get_object_or_404(Staff, id=mentor_id)
+        # print(mentor)
 
         if room.groups_room.exists() and room.room_status_day == True and time=='day':
             return Response('Дневная группа занята', 400)
         elif room.groups_room.exists() and room.room_status_evening == True and time=='evening':
             return Response('Вечерняя группа занята', 400)
+
+        if mentor.groups_mentor.exists() and mentor.mentor_status_day == True:
+            return Response('Ментор занят днем долбоеб', 400)
+        elif mentor.groups_mentor.exists() and mentor.mentor_status_evening == True:
+            return Response('Ментор занят вечером долбоеб', 400)
 
         group = Group.objects.create(
             name_of_group=name,
@@ -49,14 +60,28 @@ class GroupCreateAPIView(CreateAPIView):
             number_of_students=students,
             room=room,
         )
-        group.tracker.add(tracker_id)
-
+        if type(tracker_id) == list:
+            for t_id in tracker_id:
+                group.tracker.add(t_id)
+        elif type(tracker_id) == str:
+            for t_id in tracker_id.split(','):
+                group.tracker.add(t_id)
+        else:
+            group.tracker.add(tracker_id)
         if room is not None and time=='day':
             room.room_status_day = True
+            room.save()
         elif room is not None and time=='evening':
             room.room_status_evening = True
-
+            room.save()
         serializer = GroupSerializer(group)
+
+        if mentor.mentor_status_day is not None and time=='day':
+            mentor.mentor_status_day = True
+            mentor.save()
+        elif mentor.mentor_status_evening is not None and time=='evening':
+            mentor.mentor_status_evening = True
+            mentor.save()
         return Response(serializer.data)
         # return Response('ok')
         
@@ -94,7 +119,7 @@ class GroupUpdateAPIView(UpdateAPIView):
 
         if instance.room.groups_room.exists() and instance.room.room_status_day == True and request.data['group_studying_time']=='day':
             return Response('Дневная группа занята', 400)
-        elif instance.room.groups_room.exists() and instance.room.room_status_day == True and request.data['group_studying_time']=='evening':
+        elif instance.room.groups_room.exists() and instance.room.room_status_evening == True and request.data['group_studying_time']=='evening':
             return Response('Вечерняя группа занята', 400)
 
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
@@ -103,9 +128,10 @@ class GroupUpdateAPIView(UpdateAPIView):
 
         if request.data['group_studying_time']=='day':
             instance.room_status_day = True
+            instance.save()
         elif request.data['group_studying_time']=='evening':
             instance.room_status_evening = True
-
+            instance.save()
         # if getattr(instance, '_prefetched_objects_cache', None):
         #     instance._prefetched_objects_cache = {}
 
@@ -121,3 +147,15 @@ class GroupDeleteAPIView(DestroyAPIView):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
     permission_classes = [IsAdminUser,]
+
+    def delete(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if request.data['group_studying_time']=='day':
+            instance.room_status_day = False
+            instance.save()
+        elif request.data['group_studying_time']=='evening':
+            instance.room_status_evening = False
+            instance.save()
+        self.perform_destroy(instance=instance)
+
+        return Response('succesfully deleted')

@@ -50,6 +50,8 @@ class Staff(models.Model):
     # когда планирует уйти
     plans_to_leave = models.DateField(blank=True, null=True)
 
+    mentor_status_day = models.BooleanField(default=False)
+    mentor_status_evening = models.BooleanField(default=False)
     # старт/конец работы трекером, ментором, куратором
     trackering_start_date = models.DateField(
         verbose_name="Начало работы трекером", blank=True, null=True

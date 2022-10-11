@@ -16,8 +16,8 @@ class Room(models.Model):
 
 
     class Meta:
-        verbose_name = "Кабинеты"
+        verbose_name = "Кабинет"
         verbose_name_plural = "Кабинеты"
     
     def __str__(self) -> str:
-        return f'{self.room_number} {self.capacity} -> {self.mentor}'
+        return f'{self.room_number} {self.capacity}'
