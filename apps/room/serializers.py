@@ -43,13 +43,13 @@ class RoomChangeSer(serializers.Serializer):
         group2 = get_object_or_404(Group, name_of_group = attrs.get('group2'))
 
         
-        if group1.amount>room1.capacity and group2.amount>room2.capacity:
+        if group1.number_of_students>room1.capacity and group2.number_of_students>room2.capacity:
             raise serializers.DjangoValidationError("нет ... нет,нет,нет так не пойдет там посмотри на вмещаемость еблан")
-        elif room1.group == group1 and room2.group == group2:
-            room1.group = group2
-            room2.group = group1
-            room1.save()
-            room2.save()
+        elif group1.room == room1 and group2.room == room2:
+            group1.room = room2
+            group2.room = room1
+            group1.save()
+            group2.save()
         else:
             raise serializers.ValidationError("братан ты не тот человек которого я ожидал увидеть")
         
