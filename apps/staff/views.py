@@ -6,6 +6,7 @@ from rest_framework.decorators import api_view
 from rest_framework.generics import *
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
+from apps.group.models import Group
 
 from apps.staff.models import Staff
 from apps.staff.serializers import StaffSerializer
@@ -81,3 +82,86 @@ def ready_to_be_mentor(request):
     # print(trackering_end_date)
     return Response(allowed_staffs)
 
+@api_view(["GET"])
+def free_mentor(request):
+    """
+    если ментор свободен или до окончания его группы осталось <int> дней,
+    то он предлагается как свободный
+    """
+    day_mentors = []
+    evening_mentors = []
+    groups = Group.objects.all()
+    mentors = Staff.objects.all()
+
+    for mentor in mentors:
+        if not mentor.mentor_status_day:
+            mentor_info = f"{mentor.name} {mentor.last_name} {mentor.staff_position}(без дневной группы)"
+            if mentor.plans_to_leave:
+                mentor_info += f" планирует уйти с мейкерс {mentor.plans_to_leave}"
+            else:
+                mentor_info += f" не указана дата ухода"
+            day_mentors.append(mentor_info)
+        if not mentor.mentor_status_evening:
+            mentor_info = f"{mentor.name} {mentor.last_name} {mentor.staff_position}(без вечерней группы)"
+            if mentor.plans_to_leave:
+                mentor_info += f" планирует уйти с мейкерс {mentor.plans_to_leave}"
+            else:
+                mentor_info += f" не указана дата ухода"
+            evening_mentors.append(mentor_info)
+
+
+    res = []
+
+    for group in groups:
+        if group.mentor.groups_mentor.exists() and group.is_graduated == False:
+            if group.date_of_end:
+                today = datetime.date.today()
+                end_date = group.date_of_end
+                days = (end_date - today).days
+                if group.mentor.plans_to_leave:
+                    plans_to_leave = group.mentor.plans_to_leave
+                    mentor_info = f"{group.mentor.name} {group.mentor.last_name} - {group.mentor.staff_position}, {plans_to_leave}"
+                else:
+                    mentor_info = f"{group.mentor.name} {group.mentor.last_name} - {group.mentor.staff_position}, у ментора не указана дата ухода"
+                
+                trackers = []
+
+                for tracker in group.tracker.all():
+                    if tracker.plans_to_leave:
+                        plans_to_leave = tracker.plans_to_leave
+                        tracker_info = f"{tracker.name} {tracker.last_name} - {tracker.staff_position}, {plans_to_leave}"
+                        trackers.append(tracker_info)
+                    else:
+                        tracker_info = f"{tracker.name} {tracker.last_name} - {tracker.staff_position}, у трекера не указана дата ухода"
+                        trackers.append(tracker_info)
+
+
+                if group.group_studying_time == 'day':
+                    studying_time = 'дневная'
+                else:
+                    studying_time = 'вечерка'
+
+
+                if days<30:
+
+                    who_mentor = {
+                        mentor_info: f"Группа {group.name_of_group} {studying_time} - до окончания осталось - {days} дней ({group.date_of_end})"
+                    }
+                    res.append(who_mentor)
+
+                    for tracker in trackers:
+                        who_tracker = {
+                            tracker: f"Группа {group.name_of_group} {studying_time} - до окончания осталось - {days} дней ({group.date_of_end})"
+                        }
+                    res.append(who_tracker)
+                else:
+                    fraza = f"В ближайшие 30 дней никто не освободится"
+                    res.append(fraza)
+
+    data = {
+        'Свободные днем': day_mentors,
+        'Свободные вечером': evening_mentors,
+        'Освободятся в ближайшие 30 дней': res
+    }
+    return Response(data)
+    

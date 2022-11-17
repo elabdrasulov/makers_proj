@@ -1,3 +1,4 @@
+from random import choices
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from apps.room.models import Room
@@ -14,7 +15,11 @@ class Group(models.Model):
         ('day', 'day'),
         ('evening', 'evening')
     )
+    DATE_PROMIS = (
+        # (f'{}')
+    )
     
+    # название группы
     name_of_group = models.CharField(max_length=50)
     date_of_start = models.DateField(blank=True, null=True)
     date_of_end = models.DateField(blank=True, null=True)
@@ -29,11 +34,13 @@ class Group(models.Model):
             MaxValueValidator(36)
         ]
     )
+    is_graduated = models.BooleanField(default=False)
     mentor = models.ForeignKey(
-        Staff, related_name='groups', 
+        Staff, related_name='groups_mentor', 
         on_delete=models.SET_DEFAULT, 
         default="Ментор пока не определен"
     )
+
     # трекеры группы
     tracker = models.ManyToManyField(
         Staff, related_name='trackers',

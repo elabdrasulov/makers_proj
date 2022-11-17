@@ -14,6 +14,14 @@ class Staff(models.Model):
         ('Tracker', 'Трекер')
     )
 
+    RANK = (
+        ('Trainee', 'Trainee'),
+        ('Ninja', 'Ninja'),
+        ('Ronin', 'Ronin'),
+        ('Samurai', 'Samurai'),
+        ('Daimio', 'Daimio')
+    )
+
     name = models.CharField(max_length=50, verbose_name='Имя')
     last_name = models.CharField(max_length=50, verbose_name='Фамилия')
     photo = models.ImageField(
@@ -30,6 +38,11 @@ class Staff(models.Model):
     )
     staff_position = models.CharField(
         choices=POSITIONS, max_length=20, verbose_name='Должность'
+    )
+
+    staff_rank = models.CharField(
+        choices=RANK, max_length=20, verbose_name='Ранг',
+        blank=True, null=True
     )
 
     # начало/конец стажировки
@@ -50,6 +63,8 @@ class Staff(models.Model):
     # когда планирует уйти
     plans_to_leave = models.DateField(blank=True, null=True)
 
+    mentor_status_day = models.BooleanField(default=False)
+    mentor_status_evening = models.BooleanField(default=False)
     # старт/конец работы трекером, ментором, куратором
     trackering_start_date = models.DateField(
         verbose_name="Начало работы трекером", blank=True, null=True

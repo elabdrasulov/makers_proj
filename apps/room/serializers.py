@@ -1,8 +1,6 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 
-from apps.group.models import Group
-from .models import Room
 from .models import Room
 from apps.group.models import Group
 from apps.group.serializers import GroupSerializer

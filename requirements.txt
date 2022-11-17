@@ -11,5 +11,8 @@ dj-database-url
 django-cors-headers
 drf-api-logger
 celery
+django-celery-beat
+django-celery-results
+django-redis
 redis
 Pillow

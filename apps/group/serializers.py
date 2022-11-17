@@ -3,6 +3,7 @@ from .models import Group
 from apps.staff.serializers import StaffSerializer
 
 class GroupSerializer(serializers.ModelSerializer):
+    # date = serializers.DateField()
     class Meta:
         model = Group
         fields = '__all__'

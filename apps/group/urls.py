@@ -7,4 +7,5 @@ urlpatterns = [
     path('groups/', GroupListAPIView.as_view()),
     path('groups/update/<int:pk>/', GroupUpdateAPIView.as_view()),
     path('groups/delete/<int:pk>/', GroupDeleteAPIView.as_view()), 
+    # path('groups/test/', graduate_group),
 ]
