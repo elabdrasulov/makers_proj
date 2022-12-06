@@ -18,10 +18,10 @@ class RoomSerializer(serializers.ModelSerializer):
         # if get_object_or_404(Room, id=instance.id).groups_room.exists():
         #     rep['day group'] = GroupSerializer(day_groups, many=True).data
         
-        rep['day group'] = GroupSerializer(
+        rep['day_group'] = GroupSerializer(
             instance.groups_room.filter(group_studying_time='day'), many=True
         ).data
-        rep['evening group'] = GroupSerializer(
+        rep['evening_group'] = GroupSerializer(
             instance.groups_room.filter(group_studying_time='evening'), many=True
         ).data
 

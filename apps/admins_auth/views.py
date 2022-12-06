@@ -4,6 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 
+
 class LogoutSerializer(serializers.Serializer):
     refresh = serializers.CharField()
 
@@ -34,3 +35,20 @@ class LogoutAPIView(GenericAPIView):
             status=status.HTTP_204_NO_CONTENT
         )
 
+
+from django.contrib.admin.models import LogEntry
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.renderers import JSONRenderer
+
+class LogSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LogEntry
+        fields = '__all__'
+
+
+
+class Logs(APIView):
+    renderer_classes = [JSONRenderer]
+    def get(self, request):
+        return Response(LogSerializer(LogEntry.objects.all(), many=True).data)

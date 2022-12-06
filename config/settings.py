@@ -214,3 +214,4 @@ CACHES = {
 
 # Celery Configuration Options
 CELERY_TIMEZONE = "Asia/Bishkek"
+UNICODE_JSON = False

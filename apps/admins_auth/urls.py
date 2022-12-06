@@ -6,4 +6,5 @@ from .views import *
 urlpatterns = [
     path('login/', TokenObtainPairView.as_view()),
     path('logout/', LogoutAPIView.as_view()),
+    path('history/', Logs.as_view()),
 ]
