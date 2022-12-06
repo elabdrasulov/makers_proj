@@ -15,9 +15,6 @@ class Group(models.Model):
         ('day', 'day'),
         ('evening', 'evening')
     )
-    DATE_PROMIS = (
-        # (f'{}')
-    )
     
     # название группы
     name_of_group = models.CharField(max_length=50)

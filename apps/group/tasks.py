@@ -26,7 +26,18 @@ def graduate_group():
         if group.date_of_end:
             if group.date_of_end == today:
                 group.is_graduated = True
+                if group.group_studying_time == 'day':
+                    group.mentor.mentor_status_day = False
+                    group.room.room_status_day = False
+                    for tracker in group.tracker.all():
+                        tracker.mentor_status_day = False
+                elif group.group_studying_time == 'evening':
+                    group.mentor.mentor_status_evening = False
+                    group.room.room_status_evening = False
+                    for tracker in group.tracker.all():
+                        tracker.mentor_status_evening = False
                 group.save()
+    return 'OK'
     
     # rooms = Room.objects.all()
     # for room in rooms:
