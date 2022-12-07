@@ -40,12 +40,17 @@ from django.contrib.admin.models import LogEntry
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.renderers import JSONRenderer
+import json
 
 class LogSerializer(serializers.ModelSerializer):
     class Meta:
         model = LogEntry
         fields = '__all__'
 
+    def to_representation(self, instance:LogEntry):
+        rep = super().to_representation(instance)
+        rep['change_message'] = json.loads(rep['change_message'])
+        return rep
 
 
 class Logs(APIView):
