@@ -46,17 +46,11 @@ class LogSerializer(serializers.ModelSerializer):
     class Meta:
         model = LogEntry
         fields = '__all__'
-    
-    def to_representation(self, instance:LogEntry):
-        rep = super().to_representation(instance)
-        a=json.loads(rep['change_message'])
-        print(a, '!!!!!!!!!!!!!!!11')
 
     def to_representation(self, instance:LogEntry):
         rep = super().to_representation(instance)
-        print(rep)
-        # a=json.loads(rep['change_message'])
-        rep['change_message'] = json.loads(rep['change_message'])
+        if rep['change_message']:
+            rep['change_message'] = json.loads(rep['change_message'])
         
         return rep
 
