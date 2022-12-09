@@ -26,7 +26,8 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS').split(',')
+# ALLOWED_HOSTS = config('ALLOWED_HOSTS').split(',')
+ALLOWED_HOSTS=['*']
 
 # Application definition
 
@@ -214,4 +215,3 @@ CACHES = {
 
 # Celery Configuration Options
 CELERY_TIMEZONE = "Asia/Bishkek"
-UNICODE_JSON = False
