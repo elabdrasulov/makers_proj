@@ -54,7 +54,10 @@ class LogSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance:LogEntry):
         rep = super().to_representation(instance)
+        print(rep)
+        # a=json.loads(rep['change_message'])
         rep['change_message'] = json.loads(rep['change_message'])
+        
         return rep
 
 
