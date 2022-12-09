@@ -39,6 +39,7 @@ class LogoutAPIView(GenericAPIView):
 from django.contrib.admin.models import LogEntry
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.renderers import JSONRenderer
 import json
 
 class LogSerializer(serializers.ModelSerializer):
@@ -50,6 +51,9 @@ class LogSerializer(serializers.ModelSerializer):
         rep = super().to_representation(instance)
         a=json.loads(rep['change_message'])
         print(a, '!!!!!!!!!!!!!!!11')
+
+    def to_representation(self, instance:LogEntry):
+        rep = super().to_representation(instance)
         rep['change_message'] = json.loads(rep['change_message'])
         return rep
 
