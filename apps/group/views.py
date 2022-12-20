@@ -255,4 +255,11 @@ def graduate_group(request):
     # return Response(graduated_groups)
     graduate_group.delay()
 
+@api_view(['GET'])
+def queue(request, r_id):
+    group_id = request.data
+    room = get_object_or_404(Room, id=r_id)
 
+    # if room.room_status_day
+
+    return Response('ok')
