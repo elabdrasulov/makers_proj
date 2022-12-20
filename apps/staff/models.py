@@ -1,5 +1,6 @@
 from django.db import models
 # from apps.group.models import Group
+from django.utils.translation import gettext_lazy as _
 
 
 class Staff(models.Model):
@@ -22,8 +23,8 @@ class Staff(models.Model):
         ('Daimio', 'Daimio')
     )
 
-    name = models.CharField(max_length=50, verbose_name='Имя')
-    last_name = models.CharField(max_length=50, verbose_name='Фамилия')
+    name = models.CharField(max_length=50, verbose_name=_('имя'))
+    last_name = models.CharField(max_length=50)
     photo = models.ImageField(
         upload_to='staff/', 
         verbose_name='Фотография', 
@@ -41,7 +42,7 @@ class Staff(models.Model):
     )
 
     staff_rank = models.CharField(
-        choices=RANK, max_length=20, verbose_name='Ранг',
+        choices=RANK, max_length=20, verbose_name='Rang',
         blank=True, null=True
     )
 

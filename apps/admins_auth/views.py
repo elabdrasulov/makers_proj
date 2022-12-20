@@ -49,11 +49,12 @@ class LogSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance:LogEntry):
         rep = super().to_representation(instance)
-        rep['change_message'] = json.loads(rep['change_message'])
+        if rep['change_message']:
+            rep['change_message'] = json.loads(rep['change_message'])
+        
         return rep
 
 
 class Logs(APIView):
-    renderer_classes = [JSONRenderer]
     def get(self, request):
         return Response(LogSerializer(LogEntry.objects.all(), many=True).data)
