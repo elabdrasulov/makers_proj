@@ -29,13 +29,19 @@ def graduate_group():
                 if group.group_studying_time == 'day':
                     group.mentor.mentor_status_day = False
                     group.room.room_status_day = False
+                    group.mentor.save()
+                    group.room.save()
                     for tracker in group.tracker.all():
                         tracker.mentor_status_day = False
+                        tracker.save()
                 elif group.group_studying_time == 'evening':
                     group.mentor.mentor_status_evening = False
                     group.room.room_status_evening = False
+                    group.mentor.save()
+                    group.room.save()
                     for tracker in group.tracker.all():
                         tracker.mentor_status_evening = False
+                        tracker.save()
                 group.save()
     return 'OK'
     

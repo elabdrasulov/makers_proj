@@ -243,16 +243,27 @@ class GroupDeleteAPIView(DestroyAPIView):
 def graduate_group(request):
     # groups = Group.objects.all()
     # today = datetime.date.today()
-    # graduated_groups = []
     # for group in groups:
-    #     name = f"выпустилась {group.name_of_group} в {today}"
     #     if group.date_of_end:
     #         if group.date_of_end == today:
-    #             graduated_groups.append(name)
     #             group.is_graduated = True
+    #             if group.group_studying_time == 'day':
+    #                 group.mentor.mentor_status_day = False
+    #                 group.room.room_status_day = False
+    #                 group.mentor.save()
+    #                 group.room.save()
+    #                 for tracker in group.tracker.all():
+    #                     tracker.mentor_status_day = False
+    #                     tracker.save()
+    #             elif group.group_studying_time == 'evening':
+    #                 group.mentor.mentor_status_evening = False
+    #                 group.room.room_status_evening = False
+    #                 for tracker in group.tracker.all():
+    #                     tracker.mentor_status_evening = False
+    #                     tracker.save()
     #             group.save()
-            
-    # return Response(graduated_groups)
+    # return Response('ok')
+    
     graduate_group.delay()
 
 @api_view(['GET'])
