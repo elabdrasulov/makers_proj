@@ -1,8 +1,12 @@
 from rest_framework import serializers
+from drf_writable_nested import WritableNestedModelSerializer
 from .models import Group
 from apps.staff.serializers import StaffSerializer
 
-class GroupSerializer(serializers.ModelSerializer):
+class GroupSerializer(
+    WritableNestedModelSerializer,
+    serializers.ModelSerializer
+):
     mentor = StaffSerializer()
 
     class Meta:
