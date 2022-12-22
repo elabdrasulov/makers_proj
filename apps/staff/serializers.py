@@ -18,4 +18,5 @@ class StaffSerializer(serializers.ModelSerializer):
         if instance.mentoring_start_date:
             ment_exp = today - instance.mentoring_start_date
             rep['mentoring_experience'] = f"{ment_exp.days} дней"
+        
         return rep

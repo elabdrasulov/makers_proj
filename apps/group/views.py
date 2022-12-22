@@ -35,8 +35,9 @@ class GroupCreateAPIView(CreateAPIView):
         tracker_id = request.data.get('tracker')
         students = request.data.get('number_of_students')
         
-        if int(students)>36:
-            return Response("В группе не может быть больше 36 студентов!", 400)
+        if students:
+            if int(students)>36:
+                return Response("В группе не может быть больше 36 студентов!", 400)
         
         # print("room", room_id, Room.objects.all())
         room = get_object_or_404(Room, id=room_id)
