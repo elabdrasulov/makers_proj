@@ -94,7 +94,7 @@ class GroupCreateAPIView(CreateAPIView):
 
 
 class GroupListAPIView(ListAPIView):
-    queryset = Group.objects.all()
+    queryset = Group.objects.all().order_by('id')
     serializer_class = GroupSerializer
     permission_classes = [IsAdminUser,]
 
